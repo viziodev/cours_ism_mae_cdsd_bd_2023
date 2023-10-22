@@ -1,15 +1,18 @@
-package com.ism.services;
+package com.ism.services.impl;
 
 import java.util.ArrayList;
 
 import com.ism.entities.Categorie;
 import com.ism.repositories.CategorieRepository;
+import com.ism.services.CategorieService;
 
 public class CategorieServiceImpl implements CategorieService {
      
 //couplage faible ou Inversion de Control
       private CategorieRepository categorieRepository ;
-      //Injection de dependance
+      
+
+//Injection de dependance
       public CategorieServiceImpl(CategorieRepository categorieRepository) {
                this.categorieRepository = categorieRepository;
        }
