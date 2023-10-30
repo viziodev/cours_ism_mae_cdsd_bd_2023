@@ -21,18 +21,22 @@ public  class CategorieRepositoryImpl implements CategorieRepository {
 
     @Override
     public int insert(Categorie categorie) {
-            int nbreLigne=0;
+            int lastInsertId=0;
             try {
                 dataBase.openConnexion();
                 dataBase.initPreparedStatement(SQL_INSERT);
                 dataBase.getPs().setString(1,categorie.getLibelle());
                 dataBase.executeUpdate();
+                ResultSet rs=  dataBase.getPs().getGeneratedKeys();
+                if(rs.next()){
+                  lastInsertId=rs.getInt(1) ; 
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             
           
-            return nbreLigne;
+            return lastInsertId;
     }
 
     @Override

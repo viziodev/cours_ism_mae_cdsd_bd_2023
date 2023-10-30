@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.ism.repositories.DataBase;
 
@@ -58,6 +59,13 @@ public  class MysqlImpl  implements DataBase{
         return rs;
     }
 
+    //insert ou update ou delete
+    //update ou delete => nbreLigne affecte par la requete
+    //insert  le last insert id
+    /*
+     *  insert into ..... 
+     *  select Max(id)
+     */
     @Override
     public int executeUpdate() {
         int nbreLigne=0;
@@ -72,7 +80,12 @@ public  class MysqlImpl  implements DataBase{
     @Override
     public void initPreparedStatement(String sql) {
            try {
-            ps=conn.prepareStatement(sql);
+            if(sql.toLowerCase().startsWith("insert")){
+               ps=conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            }else{
+                ps=conn.prepareStatement(sql);
+            }
+          
         } catch (SQLException e) {
             e.printStackTrace();
         }

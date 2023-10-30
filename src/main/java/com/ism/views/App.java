@@ -57,9 +57,36 @@ public class App {
                                 break; 
                           case 3: 
                               articleService.listerArticles()
-                                      .forEach(System.out::println);                       
+                                      .forEach(System.out::println); 
+                               break; 
+                           case 4:
+                           cs.nextLine();
+                               System.out.println("Entrer le libelle");
+                                libelle=cs.nextLine(); 
+                                System.out.println("Entrer la qte en stock");
+                                int qteStock=cs.nextInt(); 
+                                System.out.println("Veuillez Selectionner une categorie");
+                                System.out.println("0-Nouveau");
+                                categorieService.lister()
+                                    .stream()
+                                    .forEach(cat->{
+                                         System.out.println(String.format("%d - %s",cat.getId(),cat.getLibelle() ));
+                                    });;
+                                    int idCat=cs.nextInt();
+                                    if(idCat==0){
+                                        cs.nextLine();
+                                        System.out.println("Entrer le libelle de Categorie");
+                                        String libelleCat=cs.nextLine();
+                                        categorie=new Categorie(libelleCat);
+                                    }else{
+                                        categorie=new Categorie(idCat,null);
+                                    }
+                              
+                                Article article=new Article(0,libelle,qteStock,categorie);
+                                articleService.ajouterArticle(article);
+                            break;                     
                         default:
-                            break;
+                         
                     }
             } while (choix !=5);
            cs.close();

@@ -12,7 +12,7 @@ import com.ism.repositories.DataBase;
 
 public class ArticleRepositoryImpl implements ArticleRepository {
 
-    private final String SQL_INSERT="INSERT INTO `articles` (`qte_stock`,  `categorie_id`,  `libelle`, ) VALUES (?,?,?)";
+    private final String SQL_INSERT="INSERT INTO `articles` (`qte_stock`,  `categorie_id`,  `libelle`) VALUES (?,?,?)";
     private final String  SQL_SELECT_ALL="SELECT id,libelle,qte_stock,categorie_id FROM `articles`";
     private DataBase dataBase;
     private CategorieRepository categorieRepository;
@@ -24,7 +24,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
     @Override
     public int insert(Article data) {
-       int nbreLigne=0;
+       int lastInsertId=0;
             try {
                 dataBase.openConnexion();
                 dataBase.initPreparedStatement(SQL_INSERT);
@@ -32,12 +32,16 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 dataBase.getPs().setInt(2,data.getCategorie().getId());
                 dataBase.getPs().setString(3,data.getLibelle());
                   dataBase.executeUpdate();
+                  ResultSet rs=  dataBase.getPs().getGeneratedKeys();
+                if(rs.next()){
+                  lastInsertId=rs.getInt(1) ; 
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
           
           
-            return nbreLigne; 
+            return lastInsertId; 
     }
 
     @Override
